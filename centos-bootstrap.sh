@@ -27,7 +27,7 @@ YUM_PACKAGES=(
     centos-release python python-libs nspr glibc rpm-python rpm yum  bzip2-libs elfutils-libelf  libacl libattr libcap libdb libselinux lua nss nss-util pcre popt rpm-libs xz-libs zlib python-iniparse python-urlgrabber pyxattr yum-metadata-parser yum-plugin-fastestmirror diffutils pygpgme pyliblzma glibc-common ncurses-libs rpm-build-libs file-libs nss-softokn sqlite nss-softokn-freebl openssl-libs krb5-libs  libcom_err keyutils-libs python-pycurl libcurl libidn libssh2 openldap cyrus-sasl-lib libffi glib2 libxml2 expat audit-libs libcap-ng
 )
 BASIC_PACKAGES=(filesystem ${YUM_PACKAGES[*]})
-EXTRA_PACKAGES=(@core @base redhat-lsb-core dracut-tools dracut-config-generic dracut-config-rescue)
+EXTRA_PACKAGES=(@core @base redhat-lsb-core)
 DEFAULT_REPO_URL="http://mirror.centos.org/centos"
 DEFAULT_ALT_REPO_URL="http://mirror.centos.org/altarch"
 

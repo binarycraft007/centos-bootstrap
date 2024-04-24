@@ -12,7 +12,7 @@ source=(
 	"centos-bootstrap.sh"
 )
 sha512sums=(
-	'856a9d1781f446aa5b5526b2acacfc8bfbc83b3375668bb1ccd90fa6ffe04f7e1d860c98f6fa064821f551a511a7e1bacec1fdf966febbcded39648e7b2c4238'
+	'877b02a1a82a2829a3c0bea069053219372652ef9f83fae5d1e3beea8de20f239d8f269e504a9ff9a90ce79d6528a84de5d14b6d9fec969610c70eaa1354ec1f'
 )
 
 package() {
