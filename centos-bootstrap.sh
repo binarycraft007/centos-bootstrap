@@ -93,8 +93,6 @@ configure_minimal_system() {
   local DEST=$1
   mkdir -p "$DEST/dev"
   mkdir -p "$DEST/etc/systemd/network"
-  rm -rf "$DEST/etc/resolv.conf"
-  ln -s "$DEST/run/systemd/resolve/resolv.conf" "$DEST/etc/resolv.conf"
   sed -ie 's/^root:.*$/root:$1$GT9AUpJe$oXANVIjIzcnmOpY07iaGi\/:14657::::::/' "$DEST/etc/shadow"
   touch "$DEST/etc/group"
   echo "bootstrap" > "$DEST/etc/hostname"
@@ -155,13 +153,13 @@ install_packages() {
     --exclude='sg3_utils' \
     --exclude='iprutils' \
     --exclude='sssd-*' \
+    --exclude='firewalld' \
     install $PACKAGES
 
     #--exclude='kernel' \
     #--exclude='abrt-addon-vmcore' \
     #--exclude='xfsdump' \
     #--exclude='kmod-*' \
-    #--exclude='firewalld' \
   umount $DEST/mnt
   umount $DEST/dev
   umount $DEST/proc
