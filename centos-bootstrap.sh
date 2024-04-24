@@ -27,7 +27,7 @@ YUM_PACKAGES=(
     centos-release python python-libs nspr glibc rpm-python rpm yum  bzip2-libs elfutils-libelf  libacl libattr libcap libdb libselinux lua nss nss-util pcre popt rpm-libs xz-libs zlib python-iniparse python-urlgrabber pyxattr yum-metadata-parser yum-plugin-fastestmirror diffutils pygpgme pyliblzma glibc-common ncurses-libs rpm-build-libs file-libs nss-softokn sqlite nss-softokn-freebl openssl-libs krb5-libs  libcom_err keyutils-libs python-pycurl libcurl libidn libssh2 openldap cyrus-sasl-lib libffi glib2 libxml2 expat audit-libs libcap-ng
 )
 BASIC_PACKAGES=(filesystem ${YUM_PACKAGES[*]})
-EXTRA_PACKAGES=(@core @base redhat-lsb-core)
+EXTRA_PACKAGES=(@core redhat-lsb-core systemd-networkd systemd-resolved)
 DEFAULT_REPO_URL="http://mirror.centos.org/centos"
 DEFAULT_ALT_REPO_URL="http://mirror.centos.org/altarch"
 
@@ -92,7 +92,9 @@ get_core_repo_url() {
 configure_minimal_system() {
   local DEST=$1
   mkdir -p "$DEST/dev"
-  cp "/etc/resolv.conf" "$DEST/etc/resolv.conf"
+  mkdir -p "$DEST/etc/systemd/network"
+  rm -rf "$DEST/etc/resolv.conf"
+  ln -s "$DEST/run/systemd/resolve/resolv.conf" "$DEST/etc/resolv.conf"
   sed -ie 's/^root:.*$/root:$1$GT9AUpJe$oXANVIjIzcnmOpY07iaGi\/:14657::::::/' "$DEST/etc/shadow"
   touch "$DEST/etc/group"
   echo "bootstrap" > "$DEST/etc/hostname"
@@ -137,7 +139,29 @@ install_packages() {
   mount -t proc procfs $DEST/proc
   mount -t sysfs sysfs $DEST/sys
   LC_ALL=C chroot "$DEST" /usr/bin/yum \
-    -y --installroot=/mnt --releasever=7 install $PACKAGES
+    -y --installroot=/mnt --releasever=7 \
+    --exclude='*firmware*' \
+    --exclude='alsa*' \
+    --exclude='libertas*' \
+    --exclude='microcode_ctl' \
+    --exclude='grub2-pc*' --exclude='grub2-efi*' \
+    --exclude='NetworkManager*' \
+    --exclude='teamd' \
+    --exclude='tuned' \
+    --exclude='parted' \
+    --exclude='kexec-tools' \
+    --exclude='btrfs-progs' \
+    --exclude='xfsprogs' \
+    --exclude='sg3_utils' \
+    --exclude='iprutils' \
+    --exclude='sssd-*' \
+    install $PACKAGES
+
+    #--exclude='kernel' \
+    #--exclude='abrt-addon-vmcore' \
+    #--exclude='xfsdump' \
+    #--exclude='kmod-*' \
+    #--exclude='firewalld' \
   umount $DEST/mnt
   umount $DEST/dev
   umount $DEST/proc
